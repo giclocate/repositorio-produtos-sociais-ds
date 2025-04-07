@@ -14,14 +14,23 @@ const sequelize = require('./config/database');
 require('./models/product');   // Carregando modelo de Produto
 require('./models/favorite'); // Carregando modelo de Favorito 
 
-// Sincroniza com o banco (cria tabelas se não existirem)
-sequelize.sync({ force: true })
-  .then(() => {
-    console.log('Tabelas sincronizadas com sucesso!');
-  })
-  .catch((err) => {
-    console.error('Erro ao sincronizar tabelas: ', err);
-  });
+const Product = require('./models/product');
+const Favorite = require('./models/favorite');
+
+(async () => {
+  try {
+    await sequelize.authenticate();
+    console.log('✅ Conexão estabelecida com sucesso.');
+
+    // Ordem de criação importa aqui:
+    await Product.sync({ force: true });   // Cria products primeiro
+    await Favorite.sync({ force: true });  // Depois favorites
+
+    console.log('✅ Tabelas sincronizadas com sucesso!');
+  } catch (err) {
+    console.error('❌ Erro ao sincronizar tabelas: ', err);
+  }
+})();
 
 // Configura o Express para interpretar JSON do body
 app.use(express.json());
