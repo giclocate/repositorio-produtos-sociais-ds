@@ -6,6 +6,13 @@ const { Sequelize } = require('sequelize');
 // Debug para verificar se o dotenv carregou corretamente
 console.log("✅ DB_DIALECT:", process.env.DB_DIALECT);
 console.log("✅ DB_PORT:", process.env.DB_PORT);
+console.log(process.env.DB_SCHEMA); 
+console.log(process.env.DB_DIALECT);
+console.log(process.env.DB_HOST);
+console.log(process.env.DB_PORT);
+console.log(process.env.DB_NAME);
+console.log(process.env.DB_USER);
+console.log(process.env.DB_PASS);
 
 const sequelize = new Sequelize(
     process.env.DB_NAME,
@@ -17,7 +24,8 @@ const sequelize = new Sequelize(
         dialect: process.env.DB_DIALECT || 'postgres',
         logging: false,
         define: {
-          schema: 'produtos_sociais'  
+          schema: process.env.DB_SCHEMA,   
+
         }
     }
 );
